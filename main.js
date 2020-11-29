@@ -17,7 +17,11 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 	var items = [];
 	var nonCaffeineExtent = d3.extent(csv, function (row) {
 	  	if (row.Caffeine == 0) {
-	  		items.push(row.Beverage + row.Beverage_prep);
+	  		if (!row.Beverage_prep.includes("ilk")) {
+		    	items.push(row.Beverage + row.Beverage_prep);
+			} else if (row.Beverage_prep.includes("onfat")) {
+		    	items.push(row.Beverage + row.Beverage_prep);
+		    }
 		}
 	});
 
@@ -277,7 +281,11 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 	  	.append("circle")
 	    	.attr("r", function(d){ 
 	    		if (d.Caffeine == 0) {
-	    			return 7;
+	    			if (!d.Beverage_prep.includes("ilk")) {
+		    			return 7;
+		    		} else if (d.Beverage_prep.includes("onfat")) {
+		    			return 7;
+		    		}
 	    		}
 	    	})
 	    	.attr("cx", function (d) {
@@ -310,7 +318,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 	var simulation = d3.forceSimulation()
       .force("center", d3.forceCenter().x(width / 2).y((height-150) / 2)) // Attraction to the center of the svg area
       .force("charge", d3.forceManyBody().strength(.1)) // Nodes are attracted one each other of value is > 0
-      .force("collide", d3.forceCollide().strength(.1).radius(function(d){ return (d.Caffeine / 8) + 3 }).iterations(1)) // Force that avoids circle overlapping
+      .force("collide", d3.forceCollide().strength(.2).radius(function(d){ return (d.Caffeine / 8) + 3 }).iterations(1)) // Force that avoids circle overlapping
 
     //Adds the simulation to the circles
 	simulation
