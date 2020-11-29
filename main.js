@@ -84,6 +84,33 @@ d3.csv("starbucksdrinks.csv", function (csv) {
  		//Clear the old chart
  		document.getElementById("chartTwoSVG").innerHTML = " ";
 
+ 		if (d.Beverage_prep.includes('Milk')) {
+ 			var select = document.getElementById("milk-buttons");
+ 			select.style.visibility = 'visible';
+ 			document.getElementById("milk-label").style.visibility = 'visible';
+ 			var size = d.Beverage_prep.split(" ");
+ 			var dataExists = false;
+ 			select.onchange = function() {
+ 				for (var i=0; i < csv.length; i++) {
+ 					if (csv[i].Beverage == d.Beverage) {
+ 						if (csv[i].Beverage_prep.includes(size[0])) {
+ 							if (csv[i].Beverage_prep.includes(select.value)) {
+ 								dataExists = true;
+ 								createBarChart(csv[i]);
+ 							}
+ 						}
+ 					}
+ 				}
+ 				if (dataExists == false) {
+ 					alert("No data for that milk type!");
+ 				}
+ 			}
+ 		} else {
+ 			var select = document.getElementById("milk-buttons");
+ 			select.style.visibility = 'hidden';
+ 			document.getElementById("milk-label").style.visibility = 'hidden';
+ 		}
+
  		//Draw the lines for the cup drawing
  		d3.select("#chartTwoSVG").append('line')
 	    	.style("stroke", "black")
@@ -190,18 +217,18 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 
 		//This creates the legend
         d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 50).text("Legend").style("font-size", "15px").style("text-decoration", "underline").attr("alignment-baseline","middle")
-       	d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",70).attr("r", 6).style("fill", "#4477AA")
-		d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",90).attr("r", 6).style("fill", "#66CCEE")
-		d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",110).attr("r", 6).style("fill", "#228833")
-		d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",130).attr("r", 6).style("fill", "#CCBB44")
-		d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",150).attr("r", 6).style("fill", "#EE6677")
-		d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",170).attr("r", 6).style("fill", "#AA3377")
-		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 70).text("Calories").style("font-size", "15px").attr("alignment-baseline","middle")
-		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 90).text("Fat").style("font-size", "15px").attr("alignment-baseline","middle")
-		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 110).text("Carbohydrates").style("font-size", "15px").attr("alignment-baseline","middle")
-		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 130).text("Cholesterol").style("font-size", "15px").attr("alignment-baseline","middle")
-		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 150).text("Sugars").style("font-size", "15px").attr("alignment-baseline","middle")
-		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 170).text("Protein").style("font-size", "15px").attr("alignment-baseline","middle")
+       	d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",70).attr("r", 6).style("fill", "#AA3377")
+		d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",90).attr("r", 6).style("fill", "#EE6677")
+       	d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",110).attr("r", 6).style("fill", "#CCBB44")
+       	d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",130).attr("r", 6).style("fill", "#228833")
+       	d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",150).attr("r", 6).style("fill", "#66CCEE")
+       	d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",170).attr("r", 6).style("fill", "#4477AA")
+		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 170).text("Calories").style("font-size", "15px").attr("alignment-baseline","middle")
+		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 150).text("Fat").style("font-size", "15px").attr("alignment-baseline","middle")
+		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 130).text("Carbohydrates").style("font-size", "15px").attr("alignment-baseline","middle")
+		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 110).text("Cholesterol").style("font-size", "15px").attr("alignment-baseline","middle")
+		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 90).text("Sugars").style("font-size", "15px").attr("alignment-baseline","middle")
+		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 70).text("Protein").style("font-size", "15px").attr("alignment-baseline","middle")
  	}
 
  	//Appends the circles to the circular packing graph
@@ -212,7 +239,11 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 		.append("circle")
 			.attr("r", function(d){ 
 		    	if (d.Caffeine > 0) {
-		    		return d.Caffeine / 8;
+		    		if (!d.Beverage_prep.includes("ilk")) {
+		    			return d.Caffeine / 8;
+		    		} else if (d.Beverage_prep.includes("onfat")) {
+		    			return d.Caffeine / 8;
+		    		}
 		    	}
     		})
 		    .attr("cx", width / 2)
@@ -279,7 +310,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 	var simulation = d3.forceSimulation()
       .force("center", d3.forceCenter().x(width / 2).y((height-150) / 2)) // Attraction to the center of the svg area
       .force("charge", d3.forceManyBody().strength(.1)) // Nodes are attracted one each other of value is > 0
-      .force("collide", d3.forceCollide().strength(.2).radius(function(d){ return (d.Caffeine / 8) + 3 }).iterations(1)) // Force that avoids circle overlapping
+      .force("collide", d3.forceCollide().strength(.1).radius(function(d){ return (d.Caffeine / 8) + 3 }).iterations(1)) // Force that avoids circle overlapping
 
     //Adds the simulation to the circles
 	simulation
