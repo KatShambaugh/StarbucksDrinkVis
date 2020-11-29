@@ -84,7 +84,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
  		//Clear the old chart
  		document.getElementById("chartTwoSVG").innerHTML = " ";
 
- 		if (d.Beverage_prep.includes('Milk')) {
+ 		if (d.Beverage_prep.includes('ilk')) {
  			var select = document.getElementById("milk-buttons");
  			select.style.visibility = 'visible';
  			document.getElementById("milk-label").style.visibility = 'visible';
