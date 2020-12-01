@@ -47,7 +47,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 		.append("svg:svg")
 		.attr('id', "chartTwoSVG")
     	.attr("width", width)
-    	.attr("height", height);
+    	.attr("height", height - 44);
 
     //This is the non-caffeinated scatterplot
     var noCaffeine = d3.select("#chart1")
@@ -57,7 +57,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
  		.append("svg")
  			.attr('id', "noCaffeineSVG")
  	 		.attr("width", width)
- 			.attr("height", 150);
+ 			.attr("height", 60);
 
 	//Creates a tooltip for the circles
 	var tooltip = d3.select("#chart1")
@@ -120,24 +120,24 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 	    	.style("stroke", "black")
 	    	.style("stroke-width", 2)
 	    	.attr("x1", 510)
-	    	.attr("y1", 130)
+	    	.attr("y1", 100)
 	    	.attr("x2", 510)
-	    	.attr("y2", 650);
+	    	.attr("y2", 630);
 
     	d3.select("#chartTwoSVG").append('line')
 	    	.style("stroke", "black")
 	    	.style("stroke-width", 2)
 	    	.attr("x1", 180)
-	    	.attr("y1", 651)
+	    	.attr("y1", 631)
 	    	.attr("x2", 511)
-	    	.attr("y2", 651);
+	    	.attr("y2", 631);
 
     	d3.select('#chartTwoSVG').append('rect')
     		.style("stroke", "black")
     		.style("stroke-width", 2)
     		.style("fill", "white")
     		.attr('x', 180) 
-    		.attr('y', 65)
+    		.attr('y', 50)
     		.attr('rx', 5)
     		.attr('width', 327)
     		.attr('height', 60);
@@ -147,7 +147,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
     		.style("stroke-width", 2)
     		.style("fill", "white")
     		.attr('x', 160) 
-    		.attr('y', 120)
+    		.attr('y', 100)
     		.attr('rx', 5)
     		.attr('width', 367)
     		.attr('height', 20);
@@ -165,7 +165,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 		//Creates the y-axis for the bar chart
  		var sum = d.Calories + d.Fat + d.Carbohydrates + d.Cholesterol + d.Sugars + d.Protein;
  		var ingredientExtent = d3.extent([0,sum]);
- 		var yScale = d3.scaleLinear().domain(ingredientExtent).range([650, 150]);
+ 		var yScale = d3.scaleLinear().domain(ingredientExtent).range([630, 130]);
 		var yAxis = d3.axisLeft().scale(yScale);
 		d3.select("#chartTwoSVG")
     		.append("g") // create a group node
@@ -220,19 +220,19 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 			})
 
 		//This creates the legend
-        d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 50).text("Legend").style("font-size", "15px").style("text-decoration", "underline").attr("alignment-baseline","middle")
-       	d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",70).attr("r", 6).style("fill", "#AA3377")
-		d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",90).attr("r", 6).style("fill", "#EE6677")
-       	d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",110).attr("r", 6).style("fill", "#CCBB44")
-       	d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",130).attr("r", 6).style("fill", "#228833")
-       	d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",150).attr("r", 6).style("fill", "#66CCEE")
-       	d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",170).attr("r", 6).style("fill", "#4477AA")
-		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 170).text("Calories").style("font-size", "15px").attr("alignment-baseline","middle")
-		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 150).text("Fat").style("font-size", "15px").attr("alignment-baseline","middle")
-		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 130).text("Carbohydrates").style("font-size", "15px").attr("alignment-baseline","middle")
-		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 110).text("Cholesterol").style("font-size", "15px").attr("alignment-baseline","middle")
-		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 90).text("Sugars").style("font-size", "15px").attr("alignment-baseline","middle")
-		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 70).text("Protein").style("font-size", "15px").attr("alignment-baseline","middle")
+        d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 70).text("Legend").style("font-size", "15px").style("text-decoration", "underline").attr("alignment-baseline","middle")
+       	d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",90).attr("r", 6).style("fill", "#AA3377")
+		d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",110).attr("r", 6).style("fill", "#EE6677")
+       	d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",130).attr("r", 6).style("fill", "#CCBB44")
+       	d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",150).attr("r", 6).style("fill", "#228833")
+       	d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",170).attr("r", 6).style("fill", "#66CCEE")
+       	d3.select("#chartTwoSVG").append("circle").attr("cx",550).attr("cy",190).attr("r", 6).style("fill", "#4477AA")
+		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 190).text("Calories").style("font-size", "15px").attr("alignment-baseline","middle")
+		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 170).text("Fat").style("font-size", "15px").attr("alignment-baseline","middle")
+		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 150).text("Carbohydrates").style("font-size", "15px").attr("alignment-baseline","middle")
+		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 130).text("Cholesterol").style("font-size", "15px").attr("alignment-baseline","middle")
+		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 110).text("Sugars").style("font-size", "15px").attr("alignment-baseline","middle")
+		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 90).text("Protein").style("font-size", "15px").attr("alignment-baseline","middle")
  	}
 
  	//Appends the circles to the circular packing graph
@@ -253,7 +253,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 		    .attr("cx", width / 2)
 		    .attr("cy", height / 2)
 		    .style("fill", "#007343")
-		    .style("fill-opacity", 0.5)
+		    .style("fill-opacity", 0.8)
 		    .attr("stroke", "#007343")
 		    .style("stroke-width", 4)
 		    .on("mouseover", function(){
@@ -270,7 +270,15 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 		      		.style("stroke", "#007343")
 				return tooltip.style("visibility", "hidden");
 			})
-			.on('click', (d) => createBarChart(d));
+			.on('click', function (d) {
+				var circles = chart1.selectAll('circle');
+				for (var i = 0; i < circles._groups[0].length; i++) {
+					d3.select(circles._groups[0][i]).style("fill", "#007343");
+				}
+				d3.select(this)
+		      		.style("fill", "#B49A67");
+				createBarChart(d);
+			});
 
 	//Appends the circles to the scatterplot
 	var noCaffeineNode = d3.select("#noCaffeineSVG")
