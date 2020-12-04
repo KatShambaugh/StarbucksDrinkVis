@@ -12,6 +12,8 @@ d3.csv("starbucksdrinks.csv", function (csv) {
     	csv[i].Sugars = Number(csv[i].Sugars);
     	csv[i].Protein = Number(csv[i].Protein);
 	}
+
+	//csv.sort(function(a, b){return b.Caffeine - a.Caffeine});
 	
 	//Creates the categorical x axis for scatterplot
 	var items = [];
