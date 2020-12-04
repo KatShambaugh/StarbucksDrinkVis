@@ -8,7 +8,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
     	csv[i].Calories = Number(csv[i].Calories);
     	csv[i].Fat = Number(csv[i].Fat);
     	csv[i].Carbohydrates = Number(csv[i].Carbohydrates);
-    	csv[i].Cholesterol = Number(csv[i].Cholesterol);
+    	csv[i].DietaryFiber = Number(csv[i].DietaryFiber);
     	csv[i].Sugars = Number(csv[i].Sugars);
     	csv[i].Protein = Number(csv[i].Protein);
 	}
@@ -163,7 +163,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 		        .text(d.Beverage +  ' - ' + d.Beverage_prep);
 
 		//Creates the y-axis for the bar chart
- 		var sum = d.Calories + d.Fat + d.Carbohydrates + d.Cholesterol + d.Sugars + d.Protein;
+ 		var sum = d.Calories + d.Fat + d.Carbohydrates + d.DietaryFiber + d.Sugars + d.Protein;
  		var ingredientExtent = d3.extent([0,sum]);
  		var yScale = d3.scaleLinear().domain(ingredientExtent).range([630, 130]);
 		var yAxis = d3.axisLeft().scale(yScale);
@@ -171,20 +171,28 @@ d3.csv("starbucksdrinks.csv", function (csv) {
     		.append("g") // create a group node
     		.attr("transform", "translate(180, 0)")
     		.call(yAxis) // call the axis
+    	d3.select("#chartTwoSVG").append("text")
+    		.attr("class", "y label")
+    		.attr("text-anchor", "end")
+    		.attr("y", 130)
+    		.attr('x', -250)
+    		.attr("dy", ".75em")
+    		.attr("transform", "rotate(-90)")
+    		.text("Count of nutrition information (calories/g)");
 
     	//Grab the data we want to show on the bar chart
     	var data = [ 
-              {Calories: d.Calories, Fat: d.Fat, Sodium: d.Sodium, Carbohydrates: d.Carbohydrates, Cholesterol: d.Cholesterol, Sugars: d.Sugars, Protein: d.Protein}
+              {Calories: d.Calories, Fat: d.Fat, Carbohydrates: d.Carbohydrates, DietaryFiber: d.DietaryFiber, Sugars: d.Sugars, Protein: d.Protein}
             ]; 
 
         //Set colors for each category
         var color = d3.scaleOrdinal()
-    		.domain(["Calories", "Fat", "Carbohydrates", "Cholesterol", "Sugars", "Protein"])
+    		.domain(["Calories", "Fat", "Carbohydrates", "DietaryFiber", "Sugars", "Protein"])
     		.range(['#4477AA','#66CCEE','#228833', '#CCBB44', '#EE6677', '#AA3377'])
     	
     	//Create the stacks of data and populate
     	var stackGen = d3.stack() 
-            .keys(["Calories", "Fat", "Carbohydrates", "Cholesterol", "Sugars", "Protein"]);
+            .keys(["Calories", "Fat", "Carbohydrates", "DietaryFiber", "Sugars", "Protein"]);
         var stack = stackGen(data); 
         
         //Add each stack to the graph
@@ -192,6 +200,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
         	.data(stack)
         	.enter().append("g")
         	.attr("class", "stack")
+        	.attr('id', d.key)
         	.attr("fill", function(d) { return color(d.key); })
 
         //Add each rectangle to the graph
@@ -210,7 +219,20 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 		    	return tooltip.style("visibility", "visible");
 		    })
 			.on("mousemove", function(d){
-				tooltip.html((d[1] - d[0]));	//Displays the value
+				var fill = this.parentElement.getAttribute("fill");
+				if (fill == "#4477AA") {
+					tooltip.html((d[1] - d[0]) + " calories"); //Displays the value
+				} else if (fill == "#66CCEE") {
+					tooltip.html((d[1] - d[0]) + " grams fat");
+				} else if (fill == "#228833") {
+					tooltip.html((d[1] - d[0]) + " grams carbohydrates");
+				} else if (fill == "#CCBB44") {
+					tooltip.html((d[1] - d[0]) + " grams dietary fiber");
+				} else if (fill == "#EE6677") {
+					tooltip.html((d[1] - d[0]) + " grams sugars");
+				} else if (fill == "#AA3377") {
+					tooltip.html((d[1] - d[0]) + " grams protein");
+				}
 				return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
 			})
 			.on("mouseout", function(){
@@ -230,7 +252,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 190).text("Calories").style("font-size", "15px").attr("alignment-baseline","middle")
 		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 170).text("Fat").style("font-size", "15px").attr("alignment-baseline","middle")
 		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 150).text("Carbohydrates").style("font-size", "15px").attr("alignment-baseline","middle")
-		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 130).text("Cholesterol").style("font-size", "15px").attr("alignment-baseline","middle")
+		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 130).text("Dietary Fiber").style("font-size", "15px").attr("alignment-baseline","middle")
 		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 110).text("Sugars").style("font-size", "15px").attr("alignment-baseline","middle")
 		d3.select("#chartTwoSVG").append("text").attr("x", 570).attr("y", 90).text("Protein").style("font-size", "15px").attr("alignment-baseline","middle")
  	}
@@ -253,9 +275,9 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 		    .attr("cx", width / 2)
 		    .attr("cy", height / 2)
 		    .style("fill", "#007343")
-		    .style("fill-opacity", 0.8)
+		    .style("fill-opacity", 0.4)
 		    .attr("stroke", "#007343")
-		    .style("stroke-width", 4)
+		    .style("stroke-width", 2)
 		    .on("mouseover", function(){
 		    	d3.select(this)
 		      		.style("stroke", "black")
@@ -273,10 +295,14 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 			.on('click', function (d) {
 				var circles = chart1.selectAll('circle');
 				for (var i = 0; i < circles._groups[0].length; i++) {
-					d3.select(circles._groups[0][i]).style("fill", "#007343");
+					d3.select(circles._groups[0][i]).style("fill-opacity", 0.4);
+				}
+				var circlesTwo = noCaffeine.selectAll('circle');
+				for (var i = 0; i < circlesTwo._groups[0].length; i++) {
+					d3.select(circlesTwo._groups[0][i]).style("fill-opacity", 0.4);
 				}
 				d3.select(this)
-		      		.style("fill", "#B49A67");
+		      		.style("fill-opacity", 1);
 				createBarChart(d);
 			});
 
@@ -303,16 +329,16 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 	      		return 150 / 5;
 	    	})
 	    	.style("fill", "#007343")
-	    	.style("fill-opacity", 0.5)
+	    	.style("fill-opacity", 0.4)
 	    	.attr("stroke", "#007343")
-	    	.style("stroke-width", 4)
+	    	.style("stroke-width", 2)
 	    	.on("mouseover", function(){
 		    	d3.select(this)
 		      		.style("stroke", "black")
 		    	return tooltip.style("visibility", "visible");
 		    })
 			.on("mousemove", function(d){
-				tooltip.html(d.Beverage + " - " + d.Beverage_prep + "<br><b>Caffeine content: </b>" + d.Caffeine + "mg");
+				tooltip.html(d.Beverage + " - " + d.Beverage_prep);
 				return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
 			})
 			.on("mouseout", function(){
@@ -320,13 +346,25 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 		      		.style("stroke", "#007343")
 				return tooltip.style("visibility", "hidden");
 			})
-			.on('click', (d) => createBarChart(d));
+			.on('click', function (d) {
+				var circles = chart1.selectAll('circle');
+				for (var i = 0; i < circles._groups[0].length; i++) {
+					d3.select(circles._groups[0][i]).style("fill-opacity", 0.4);
+				}
+				var circlesTwo = noCaffeine.selectAll('circle');
+				for (var i = 0; i < circlesTwo._groups[0].length; i++) {
+					d3.select(circlesTwo._groups[0][i]).style("fill-opacity", 0.4);
+				}
+				d3.select(this)
+		      		.style("fill-opacity", 1);
+				createBarChart(d);
+			});
 	
 	//Sets up the physics for the circular packing
 	var simulation = d3.forceSimulation()
       .force("center", d3.forceCenter().x(width / 2).y((height-150) / 2)) // Attraction to the center of the svg area
-      .force("charge", d3.forceManyBody().strength(.1)) // Nodes are attracted one each other of value is > 0
-      .force("collide", d3.forceCollide().strength(.2).radius(function(d){ return (d.Caffeine / 8) + 3 }).iterations(1)) // Force that avoids circle overlapping
+      .force("charge", d3.forceManyBody().strength(1)) // Nodes are attracted one each other of value is > 0
+      .force("collide", d3.forceCollide().strength(.1).radius(function(d){ return (d.Caffeine / 8) + 2 }).iterations(1)) // Force that avoids circle overlapping
 
     //Adds the simulation to the circles
 	simulation
