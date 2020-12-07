@@ -1,3 +1,9 @@
+/*
+ * Starbucks Drink Visualization
+ * Built using d3.js in Fall 2020
+ * @author: Katherine Shambaugh
+ */ 
+
 var width = 700;
 var height = 700;
 
@@ -13,9 +19,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
     	csv[i].Protein = Number(csv[i].Protein);
 	}
 
-	//csv.sort(function(a, b){return b.Caffeine - a.Caffeine});
-	
-	//Creates the categorical x axis for scatterplot
+	//Pulls all the non-caffeinated items
 	var items = [];
 	var nonCaffeineExtent = d3.extent(csv, function (row) {
 	  	if (row.Caffeine == 0) {
@@ -90,6 +94,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
  		//Clear the old chart
  		document.getElementById("chartTwoSVG").innerHTML = " ";
 
+ 		//Handles milk selection
  		if (d.Beverage_prep.includes('ilk')) {
  			var select = document.getElementById("milk-buttons");
  			select.style.visibility = 'visible';
@@ -154,7 +159,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
     		.attr('width', 367)
     		.attr('height', 20);
 
-    	//Add the title two the stacked bar chart
+    	//Add the title to the stacked bar chart
  		d3.select("#chartTwoSVG")
  			.append("text")
 		        .attr("x", (width / 2))             
@@ -173,7 +178,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
     		.append("g") // create a group node
     		.attr("transform", "translate(180, 0)")
     		.call(yAxis) // call the axis
-    	d3.select("#chartTwoSVG").append("text")
+    	d3.select("#chartTwoSVG").append("text") //Add the label
     		.attr("class", "y label")
     		.attr("text-anchor", "end")
     		.attr("y", 130)
@@ -221,7 +226,7 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 		    	return tooltip.style("visibility", "visible");
 		    })
 			.on("mousemove", function(d){
-				var fill = this.parentElement.getAttribute("fill");
+				var fill = this.parentElement.getAttribute("fill"); //There is probably a better way to do this but alas
 				if (fill == "#4477AA") {
 					tooltip.html((d[1] - d[0]) + " calories"); //Displays the value
 				} else if (fill == "#66CCEE") {
@@ -378,8 +383,8 @@ d3.csv("starbucksdrinks.csv", function (csv) {
 	    });
 
 	//Appends the x-axis to the scatterplot
-	d3.select("#noCaffeineSVG") // or something else that selects the SVG element in your visualizations
-	    .append("g") // create a group node
+	d3.select("#noCaffeineSVG")
+	    .append("g")
 	    .attr("transform", "translate(0," + (10) + ")")
 	    .call(xAxis)
     	.attr("visibility", "hidden")
